@@ -54,12 +54,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DecisionEngine\DecisionEngine.csproj">
-      <Project>{53F8588D-0D73-41AF-AAC5-2B1089AFA565}</Project>
-      <Name>DecisionEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="AHPProcess.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
