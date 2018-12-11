@@ -1,0 +1,87 @@
+﻿1. Define the Objective
+	Help students which track to decide: Python, JavaScript, .NET
+
+2. Structure Elemeints in Criteria, Sub Criteria, Alternatives
+
+3. Make a pair wise comparison of elements in each group
+
+4. Calculate weighting and consistency ratio.
+
+
+Objective : Choose a Track for the Bootcamp(Python, JS, .NET)
+
+Criteria  : Placement Time, Layout, Logic
+			Placement Time : Immediate, 1 month, 3 months
+			Design: More UI Design, Some UI Design, Less UI Design, Barely Any UI
+			Experience: Lots of Java, Some Java, 
+
+Alternatives : 
+			Placement
+				.NET			    :    1-2 months
+				JavaScript			:    2-3 months
+				Python				:    Unknown
+
+
+Compare all elements pair wise with respect to the objective.
+
+9 7 5 3 1  1/3  1/5  1/7  1/9
+
+1 means the criteria are equal
+
+Scale: 
+
+9 means one criteria is extreme.
+7 very strong
+5 strong
+3 moderate strong
+1 equal
+1/3 moderate strong
+1/5 strong
+1/7 very strong
+1/9 extreme
+
+
+Example:
+
+Logic			vs.   Layout
+9 7 5 3 1  1/3  1/5  1/7  1/9
+1. User says 9
+
+Logic			vs.   Job Placement
+9 7 5 3 1  1/3  1/5  1/7  1/9
+2. User says 1/9
+
+Layout			vs.   Job Placement
+9 7 5 3 1  1/3  1/5  1/7  1/9
+3. User sasy 1/3
+
+
+
+Note: Simply notice: The 1s are because 
+the comparison is to itself. logic vs logic would be a one. 
+
+		Logic   Layout   Job
+Logic     1        9      1/9
+Layout    9        1      1/3
+Job       1/9      1/3     1
+
+
+Numerical Rating & Inverse Numerical Rating
+
+			Apples		Oranges
+Apples		  1			   9  <--Since this is 9,
+Oranges		 1/9		   1
+			  ^---this must be the inverse.
+			  
+
+
+
+
+
+
+
+
+
+
+
+
