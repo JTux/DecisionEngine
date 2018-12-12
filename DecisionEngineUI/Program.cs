@@ -1,5 +1,4 @@
-﻿using DecisionEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,13 +23,20 @@ namespace DecisionEngineUI
 
             */
             #endregion
-
-            int[] apples = { -9, -9, -9, 9, -9, -9 }; // apples > grapes > oranges > candy
+            int itemCount = 4;
+            int[] itemValues = { -9, -9, -9, 9, -9, -9 }; // apples > grapes > oranges > candy
 
 
             var decisionEngine = new DecisionEngine();
-            var heavyApples = decisionEngine.TrackDecision(apples);
+            var heavyApples = decisionEngine.TrackDecision(itemValues, itemCount);
+            int i = 0;
+            foreach (var x in heavyApples)
+            {
+                Console.Write(++i + ") ");
+                Console.WriteLine(x);
+            }
 
+            Console.WriteLine();
             /*
              * 
              *        -9   -7    -5    -3     1    3    5   7   9

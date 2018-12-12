@@ -9,28 +9,28 @@ namespace DecisionEngineUI
 {
     public class DecisionEngine
     {
-        public double[,] TrackDecision(int[] values)
+        public double[,] TrackDecision(int[] values, int itemCount)
         {
             var comparisonMatrix = new double[5, 5];
-            var normedMatrix = NormalizeMatrix(comparisonMatrix);
+            var normedMatrix = NormalizeMatrix(comparisonMatrix, itemCount);
             var matrixWithSetArrayValues = SetValuesOnNormedMatrix(values, normedMatrix);
-            double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues);
-            var matrixWithAddedColumns = AddColumnTotals(matrixWithoutNegatives);
-            var multipliedMatrix = CreateMultipliedNormalizeMatrix(matrixWithAddedColumns);
-            var matrixWithEigenVectorRows = CalculateEigenVectorRows(multipliedMatrix);
+            double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues, itemCount);
+            var matrixWithAddedColumns = AddColumnTotals(matrixWithoutNegatives, itemCount);
+            var multipliedMatrix = CreateMultipliedNormalizeMatrix(matrixWithAddedColumns, itemCount);
+            var matrixWithEigenVectorRows = CalculateEigenVectorRows(multipliedMatrix, itemCount);
 
             return matrixWithEigenVectorRows;
         }
 
-        private double[,] RemoveNegativesInMatrix(double[,] matrix)
+        private double[,] RemoveNegativesInMatrix(double[,] matrix, int length)
         {
             double cellValue = 0.0;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < length; i++)
             {
                 int k = 0;
 
-                for (int j = i; k < 4; k++)
+                for (int j = i; k < length; k++)
                 {
                     (cellValue) = matrix[j, k];
                     var newCellValue = Math.Abs(cellValue);
@@ -38,28 +38,25 @@ namespace DecisionEngineUI
                 };
             }
             return matrix;
-
         }
 
-        private double[,] CalculateEigenVectorRows(double[,] matrix)
+        private double[,] CalculateEigenVectorRows(double[,] matrix, int length)
         {
-            var rowTotal = 0.0;
-            for (int i = 0; i <= 3; i++)
+            for (int i = 0; i < length; i++)
             {
-                double totalForRow = 0.0;
-                double lastCell = matrix[i, 4];
+                double lastCell = matrix[i, length];
                 var totalCellValue = 0.0;
 
                 int k = 0;
 
-                for (int j = i; k < 4; k++)
+                for (int j = i; k < length; k++)
                 {
                     var cellValue = matrix[j, k];
                     totalCellValue += cellValue;
-                    if (k == 3)
+                    if (k == (length - 1))
                     {
-                        lastCell = totalCellValue / 4;
-                        matrix[i, 4] = lastCell;
+                        lastCell = totalCellValue / length;
+                        matrix[i, length] = lastCell;
                     }
                 };
             }
@@ -67,23 +64,23 @@ namespace DecisionEngineUI
             return matrix;
         }
 
-        private double[,] NormalizeMatrix(double[,] matrix)
+        private double[,] NormalizeMatrix(double[,] matrix, int length)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < length; i++)
                 matrix[i, i] = (1.0);
 
             return matrix;
         }
 
-        private double[,] CreateMultipliedNormalizeMatrix(double[,] matrix)
+        private double[,] CreateMultipliedNormalizeMatrix(double[,] matrix, int length)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < length; i++)
             {
-                double bottomCell = matrix[4, i];
+                double bottomCell = matrix[length, i];
 
                 int k = 0;
 
-                for (int j = i; k < 4; k++)
+                for (int j = i; k < length; k++)
                 {
                     var cellValue = matrix[j, k];
                     var newCellValue = cellValue / bottomCell;
@@ -92,14 +89,12 @@ namespace DecisionEngineUI
             }
             return matrix;
         }
-
-
-
+        
         private double[,] SetValuesOnNormedMatrix(int[] values, double[,] matrix)
         {
             int value;
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < values.Count(); i++)
             {
                 value = values[i];
 
@@ -188,22 +183,22 @@ namespace DecisionEngineUI
             return inverse;
         }
 
-        private double[,] AddColumnTotals(double[,] matrix)
+        private double[,] AddColumnTotals(double[,] matrix, int length)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < length; i++)
             {
                 int k = 0;
                 double columnTotalValue = 0.0;
 
-                for (int j = i; k < 4; k++)
+                for (int j = i; k < length; k++)
                 {
                     double cellValue;
                     (cellValue) = Math.Abs(matrix[k, j]);
                     columnTotalValue += (cellValue);
 
-                    if (k == 3)
+                    if (k == (length - 1))
                     {
-                        matrix[4, j] = (columnTotalValue);
+                        matrix[length, j] = (columnTotalValue);
                         break;
                     }
                 };
