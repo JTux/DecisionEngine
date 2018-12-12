@@ -13,7 +13,7 @@ namespace DecisionEngineUI
         {
             var comparisonMatrix = new double[5, 5];
             var normedMatrix = NormalizeMatrix(comparisonMatrix, itemCount);
-            var matrixWithSetArrayValues = SetValuesOnNormedMatrix(values, normedMatrix);
+            var matrixWithSetArrayValues = SetValuesOnNormedMatrix(values, normedMatrix, itemCount);
             double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues, itemCount);
             var matrixWithAddedColumns = AddColumnTotals(matrixWithoutNegatives, itemCount);
             var multipliedMatrix = CreateMultipliedNormalizeMatrix(matrixWithAddedColumns, itemCount);
@@ -89,89 +89,28 @@ namespace DecisionEngineUI
             }
             return matrix;
         }
-        
-        private double[,] SetValuesOnNormedMatrix(int[] values, double[,] matrix)
+
+        private double[,] SetValuesOnNormedMatrix(int[] values, double[,] matrix, int itemCount)
         {
-            int value;
+            int count = 0;
 
-            for (int i = 0; i < values.Count(); i++)
+            for (int i = 0; i < itemCount; i++)
             {
-                value = values[i];
-
-                switch (i)
+                for (int j = 0; j < itemCount; j++)
                 {
-                    case 0:
-                        if (value < 0)
-                        {
-                            matrix[0, 1] = GetInverse(value);
-                            matrix[1, 0] = (value);
-                        }
-                        else
-                        {
-                            matrix[0, 1] = (value);
-                            matrix[1, 0] = GetInverse(value);
-                        }
-                        break;
-                    case 1:
-                        if (value < 0)
-                        {
-                            matrix[0, 2] = GetInverse(value);
-                            matrix[2, 0] = (value);
-                        }
-                        else
-                        {
-                            matrix[0, 2] = (value);
-                            matrix[2, 0] = GetInverse(value);
-                        }
-                        break;
-                    case 2:
-                        if (value < 0)
-                        {
-                            matrix[0, 3] = GetInverse(value);
-                            matrix[3, 0] = (value);
-                        }
-                        else
-                        {
-                            matrix[0, 3] = (value);
-                            matrix[3, 0] = GetInverse(value);
-                        }
-                        break;
-                    case 3:
-                        if (value < 0)
-                        {
-                            matrix[1, 2] = GetInverse(value);
-                            matrix[2, 1] = (value);
-                        }
-                        else
-                        {
-                            matrix[1, 2] = (value);
-                            matrix[2, 1] = GetInverse(value);
-                        }
-                        break;
-                    case 4:
-                        if (value < 0)
-                        {
-                            matrix[1, 3] = GetInverse(value);
-                            matrix[3, 1] = (value);
-                        }
-                        else
-                        {
-                            matrix[1, 3] = (value);
-                            matrix[3, 1] = GetInverse(value);
-                        }
-                        break;
-                    case 5:
-                        if (value < 0)
-                        {
-                            matrix[2, 3] = GetInverse(value);
-                            matrix[3, 2] = (value);
-                        }
-                        else
-                        {
-                            matrix[2, 3] = (value);
-                            matrix[3, 2] = GetInverse(value);
-                        }
-                        break;
+                    if (i >= j) continue;
+                    int value = values[count];
+                    if (value < 0)
+                    {
+                        matrix[i, j] = GetInverse(value);
+                        matrix[j, i] = value;
+                    }
+                    else
+                    {
+                        matrix[i, j] = value;
+                        matrix[j, i] = GetInverse(value);
+                    }
+                    count++;
                 }
             }
             return matrix;
