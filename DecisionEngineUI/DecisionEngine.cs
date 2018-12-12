@@ -14,14 +14,16 @@ namespace DecisionEngineUI
             var comparisonMatrix = new double[5, 5];
             var normedMatrix = NormalizeMatrix(comparisonMatrix, itemCount);
             var matrixWithSetArrayValues = SetValuesOnNormedMatrix(values, normedMatrix, itemCount);
-            double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues, itemCount);
-            var matrixWithAddedColumns = AddColumnTotals(matrixWithoutNegatives, itemCount);
+            //double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues, itemCount);
+            var matrixWithAddedColumns = AddColumnTotals(matrixWithSetArrayValues, itemCount);
             var multipliedMatrix = CreateMultipliedNormalizeMatrix(matrixWithAddedColumns, itemCount);
             var matrixWithEigenVectorRows = CalculateEigenVectorRows(multipliedMatrix, itemCount);
 
             return matrixWithEigenVectorRows;
         }
 
+        //Can we move this step into the same method where we get the inverse of the values?
+        //This way we avoid iterating over the list twice
         private double[,] RemoveNegativesInMatrix(double[,] matrix, int length)
         {
             double cellValue = 0.0;
@@ -102,13 +104,17 @@ namespace DecisionEngineUI
                     int value = values[count];
                     if (value < 0)
                     {
-                        matrix[i, j] = GetInverse(value);
-                        matrix[j, i] = value;
+                        //Here's where I get the absolute. I'd argue that getting the absolute here while we're iterating already
+                        //Fits into the purpose of SettingValuesOnNormedMatrix and saves us an entire matrix iteration
+                        var absolute = Math.Abs(value); 
+                        matrix[i, j] = GetInverse(absolute);
+                        matrix[j, i] = absolute;
                     }
                     else
                     {
-                        matrix[i, j] = value;
-                        matrix[j, i] = GetInverse(value);
+                        var absolute = Math.Abs(value);
+                        matrix[i, j] = absolute;
+                        matrix[j, i] = GetInverse(absolute);
                     }
                     count++;
                 }
