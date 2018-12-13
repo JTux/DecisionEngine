@@ -11,7 +11,7 @@ namespace DecisionEngineUI
     {
         public double[,] TrackDecision(int[] values, int itemCount)
         {
-            var comparisonMatrix = new double[5, 5];
+            var comparisonMatrix = new double[(itemCount + 1), (itemCount + 1)];
             var normedMatrix = NormalizeMatrix(comparisonMatrix, itemCount);
             var matrixWithSetArrayValues = SetValuesOnNormedMatrix(values, normedMatrix, itemCount);
             //double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues, itemCount);
@@ -22,25 +22,23 @@ namespace DecisionEngineUI
             return matrixWithEigenVectorRows;
         }
 
-        //Can we move this step into the same method where we get the inverse of the values?
-        //This way we avoid iterating over the list twice
-        private double[,] RemoveNegativesInMatrix(double[,] matrix, int length)
-        {
-            double cellValue = 0.0;
+        //private double[,] RemoveNegativesInMatrix(double[,] matrix, int length)
+        //{
+        //    double cellValue = 0.0;
 
-            for (int i = 0; i < length; i++)
-            {
-                int k = 0;
+        //    for (int i = 0; i < length; i++)
+        //    {
+        //        int k = 0;
 
-                for (int j = i; k < length; k++)
-                {
-                    (cellValue) = matrix[j, k];
-                    var newCellValue = Math.Abs(cellValue);
-                    matrix[j, k] = newCellValue;
-                };
-            }
-            return matrix;
-        }
+        //        for (int j = i; k < length; k++)
+        //        {
+        //            (cellValue) = matrix[j, k];
+        //            var newCellValue = Math.Abs(cellValue);
+        //            matrix[j, k] = newCellValue;
+        //        };
+        //    }
+        //    return matrix;
+        //}
 
         private double[,] CalculateEigenVectorRows(double[,] matrix, int length)
         {
@@ -84,9 +82,9 @@ namespace DecisionEngineUI
 
                 for (int j = i; k < length; k++)
                 {
-                    var cellValue = matrix[j, k];
+                    var cellValue = matrix[k, j];
                     var newCellValue = cellValue / bottomCell;
-                    matrix[j, k] = newCellValue;
+                    matrix[k, j] = newCellValue;
                 };
             }
             return matrix;
@@ -104,9 +102,7 @@ namespace DecisionEngineUI
                     int value = values[count];
                     if (value < 0)
                     {
-                        //Here's where I get the absolute. I'd argue that getting the absolute here while we're iterating already
-                        //Fits into the purpose of SettingValuesOnNormedMatrix and saves us an entire matrix iteration
-                        var absolute = Math.Abs(value); 
+                        var absolute = Math.Abs(value);
                         matrix[i, j] = GetInverse(absolute);
                         matrix[j, i] = absolute;
                     }
@@ -137,14 +133,14 @@ namespace DecisionEngineUI
 
                 for (int j = i; k < length; k++)
                 {
-                    double cellValue;
-                    (cellValue) = Math.Abs(matrix[k, j]);
-                    columnTotalValue += (cellValue);
+                    //double cellValue = matrix[k, j];
+                    //(cellValue) = Math.Abs(matrix[k, j]);
+                    columnTotalValue += (matrix[k, j]);
 
                     if (k == (length - 1))
                     {
                         matrix[length, j] = (columnTotalValue);
-                        break;
+                        //break;
                     }
                 };
             };
