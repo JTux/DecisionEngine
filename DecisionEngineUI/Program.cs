@@ -29,15 +29,18 @@ namespace DecisionEngineUI
 
             var decisionEngine = new DecisionEngine();
             var heavyApples = decisionEngine.TrackDecision(itemValues, itemCount);
-            int k = 0;
-            for (int i = 0; i < itemValues.Count() - 1; i++)
+
+            for (int y = 0; y <= itemCount; y++)
             {
-                for (int j = 0; j < itemValues.Count() - 1; j++)
+                for(int x = 0; x <= itemCount; x++)
                 {
-                    Console.WriteLine(heavyApples[j, i]);
+                    Console.Write($"{(heavyApples[x, y]), -20}");
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+
+            var total = heavyApples[4, 0] + heavyApples[4, 1] + heavyApples[4, 2] + heavyApples[4, 3];
 
             Console.WriteLine();
             /*

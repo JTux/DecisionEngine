@@ -14,7 +14,6 @@ namespace DecisionEngineUI
             var comparisonMatrix = new double[(itemCount + 1), (itemCount + 1)];
             var normedMatrix = NormalizeMatrix(comparisonMatrix, itemCount);
             var matrixWithSetArrayValues = SetValuesOnNormedMatrix(values, normedMatrix, itemCount);
-            //double[,] matrixWithoutNegatives = RemoveNegativesInMatrix(matrixWithSetArrayValues, itemCount);
             var matrixWithAddedColumns = AddColumnTotals(matrixWithSetArrayValues, itemCount);
             var multipliedMatrix = CreateMultipliedNormalizeMatrix(matrixWithAddedColumns, itemCount);
             var matrixWithEigenVectorRows = CalculateEigenVectorRows(multipliedMatrix, itemCount);
@@ -22,69 +21,43 @@ namespace DecisionEngineUI
             return matrixWithEigenVectorRows;
         }
 
-        //private double[,] RemoveNegativesInMatrix(double[,] matrix, int length)
-        //{
-        //    double cellValue = 0.0;
-
-        //    for (int i = 0; i < length; i++)
-        //    {
-        //        int k = 0;
-
-        //        for (int j = i; k < length; k++)
-        //        {
-        //            (cellValue) = matrix[j, k];
-        //            var newCellValue = Math.Abs(cellValue);
-        //            matrix[j, k] = newCellValue;
-        //        };
-        //    }
-        //    return matrix;
-        //}
-
-        private double[,] CalculateEigenVectorRows(double[,] matrix, int length)
+        private double[,] CalculateEigenVectorRows(double[,] matrix, int itemCount)
         {
-            for (int i = 0; i < length; i++)
+            for (int y = 0; y < itemCount; y++)
             {
-                double lastCell = matrix[i, length];
-                var totalCellValue = 0.0;
+                var totalRowValue = 0.0;
 
-                int k = 0;
-
-                for (int j = i; k < length; k++)
+                for (int x = 0; x < itemCount; x++)
                 {
-                    var cellValue = matrix[j, k];
-                    totalCellValue += cellValue;
-                    if (k == (length - 1))
-                    {
-                        lastCell = totalCellValue / length;
-                        matrix[i, length] = lastCell;
-                    }
+                    var cellValue = matrix[x, y];
+                    totalRowValue += cellValue;
+                    if (x == (itemCount - 1))
+                        matrix[itemCount, y] = totalRowValue / itemCount;
                 };
             }
 
             return matrix;
         }
 
-        private double[,] NormalizeMatrix(double[,] matrix, int length)
+        private double[,] NormalizeMatrix(double[,] matrix, int itemCount)
         {
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < itemCount; i++)
                 matrix[i, i] = (1.0);
 
             return matrix;
         }
 
-        private double[,] CreateMultipliedNormalizeMatrix(double[,] matrix, int length)
+        private double[,] CreateMultipliedNormalizeMatrix(double[,] matrix, int itemCount)
         {
-            for (int i = 0; i < length; i++)
+            for (int x = 0; x < itemCount; x++)
             {
-                double bottomCell = matrix[length, i];
+                double bottomCell = matrix[x, itemCount];
 
-                int k = 0;
-
-                for (int j = i; k < length; k++)
+                for (int y = 0; y < itemCount; y++)
                 {
-                    var cellValue = matrix[k, j];
+                    var cellValue = matrix[x, y];
                     var newCellValue = cellValue / bottomCell;
-                    matrix[k, j] = newCellValue;
+                    matrix[x, y] = newCellValue;
                 };
             }
             return matrix;
@@ -94,23 +67,23 @@ namespace DecisionEngineUI
         {
             int count = 0;
 
-            for (int i = 0; i < itemCount; i++)
+            for (int x = 0; x < itemCount; x++)
             {
-                for (int j = 0; j < itemCount; j++)
+                for (int y = 0; y < itemCount; y++)
                 {
-                    if (i >= j) continue;
+                    if (x >= y) continue;
                     int value = values[count];
                     if (value < 0)
                     {
                         var absolute = Math.Abs(value);
-                        matrix[i, j] = GetInverse(absolute);
-                        matrix[j, i] = absolute;
+                        matrix[x, y] = GetInverse(absolute);
+                        matrix[y, x] = absolute;
                     }
                     else
                     {
                         var absolute = Math.Abs(value);
-                        matrix[i, j] = absolute;
-                        matrix[j, i] = GetInverse(absolute);
+                        matrix[x, y] = absolute;
+                        matrix[y, x] = GetInverse(absolute);
                     }
                     count++;
                 }
@@ -124,24 +97,18 @@ namespace DecisionEngineUI
             return inverse;
         }
 
-        private double[,] AddColumnTotals(double[,] matrix, int length)
+        private double[,] AddColumnTotals(double[,] matrix, int itemCount)
         {
-            for (int i = 0; i < length; i++)
+            for (int x = 0; x < itemCount; x++)
             {
-                int k = 0;
                 double columnTotalValue = 0.0;
 
-                for (int j = i; k < length; k++)
+                for (int y = 0; y < itemCount; y++)
                 {
-                    //double cellValue = matrix[k, j];
-                    //(cellValue) = Math.Abs(matrix[k, j]);
-                    columnTotalValue += (matrix[k, j]);
+                    columnTotalValue += (matrix[x, y]);
 
-                    if (k == (length - 1))
-                    {
-                        matrix[length, j] = (columnTotalValue);
-                        //break;
-                    }
+                    if (y == (itemCount - 1))
+                        matrix[x, itemCount] = (columnTotalValue);
                 };
             };
             return matrix;
