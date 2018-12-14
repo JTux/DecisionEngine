@@ -29,15 +29,18 @@ namespace DecisionEngineUI
 
             var decisionEngine = new DecisionEngine();
             var heavyApples = decisionEngine.TrackDecision(itemValues, itemCount);
-            int k = 0;
-            for (int i = 0; i < itemValues.Count() - 1; i++)
+
+            for (int y = 0; y <= itemCount; y++)
             {
-                for (int j = 0; j < itemValues.Count() - 1; j++)
+                for(int x = 0; x <= itemCount; x++)
                 {
-                    Console.WriteLine(heavyApples[j, i]);
+                    Console.Write($"{(heavyApples[x, y]), -20}");
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+
+            var total = heavyApples[4, 0] + heavyApples[4, 1] + heavyApples[4, 2] + heavyApples[4, 3];
 
             Console.WriteLine();
             /*
@@ -46,11 +49,11 @@ namespace DecisionEngineUI
              *  Breakdown of the above hierarchy
              *  
                     APPLES ORANGES GRAPES CANDY
-            APPLES    1      1/9     1/9    1/9
-            ORANGES   9        1       9    1/9
-            GRAPES    9      1/9       1    1/9
-            CANDY     9        9       9     1
-            Eigen V   28     10.2   19.1   1.3
+            APPLES    1        9       9      9
+            ORANGES   1/9      1     1/9      9
+            GRAPES    1/9      9       1      9
+            CANDY     1/9     1/9    1/9      1
+            Eigen V   1.3    19.1   10.2     28
 
 
             */
