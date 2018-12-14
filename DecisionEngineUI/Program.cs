@@ -49,11 +49,11 @@ namespace DecisionEngineUI
              *  Breakdown of the above hierarchy
              *  
                     APPLES ORANGES GRAPES CANDY
-            APPLES    1      1/9     1/9    1/9
-            ORANGES   9        1       9    1/9
-            GRAPES    9      1/9       1    1/9
-            CANDY     9        9       9     1
-            Eigen V   28     10.2   19.1   1.3
+            APPLES    1        9       9      9
+            ORANGES   1/9      1     1/9      9
+            GRAPES    1/9      9       1      9
+            CANDY     1/9     1/9    1/9      1
+            Eigen V   1.3    19.1   10.2     28
 
 
             */
